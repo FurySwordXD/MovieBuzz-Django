@@ -37,8 +37,9 @@ def movie(request, movie_name):
 
     return render(request, 'movie.html', {'user': request.user, 'movie': movie, 'data': data})
 
-def show(request, show_id):
+def show(request):
     if request.user.is_authenticated:
+        show_id = request.GET['show_id']
         show = Show.objects.get(id=show_id)
         screen = show.screen
         seats = []
@@ -68,7 +69,7 @@ def show(request, show_id):
         with open('data.json', 'w') as file:
             json.dump(seats, file) 
 
-        return render(request, 'show.html', {'user': request.user, 'screen': screen, 'movie': show.movie, 'seats': seats, 'show_id': show_id})
+        return render(request, 'show.html', {'user': request.user, 'screen': screen, 'movie': show.movie, 'seats': seats, 'show_id': show_id, 'tickets': request.GET['tickets']})
     
     return redirect('/')
 

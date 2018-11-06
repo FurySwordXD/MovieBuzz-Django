@@ -30,10 +30,16 @@
             <div class="w3-bar-item w3-black">
                 Tickets:
             </div>
-            <select class="w3-select w3-black w3-bar-item" name="option">
+            <select class="w3-select w3-black w3-bar-item" name="option" id="tickets">
                 <option value="1">1</option>
                 <option value="2" selected>2</option>
                 <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
             </select> 
             {% for block in data %}
                 {% if forloop.counter0 == 0 %}
@@ -62,13 +68,20 @@
                     <div class="w3-col m3 w3-padding-large">{{ screen.name }}<br><i>({{ screen.theatre }})</i></div>
                     <div class="w3-col m9 w3-bar">
                     {% for show in screen.shows %}
-                        <a class="w3-btn w3-green w3-bar-item w3-margin-left w3-section w3-padding-small" href="/show/{{ show.show_id }}/">{{ show.time }}</a>
+                        <a class="w3-btn w3-green w3-bar-item w3-margin-left w3-section w3-padding-small show" data-show_id="{{ show.show_id }}">{{ show.time }}</a>
                     {% endfor %}
                     </div>
                 </div>
                 {% endfor %}
             </div>
         {% endfor %}
+        <script>
+            $(".show").click(function() { 
+                var show_id = $(this).data('show_id');
+                var tickets = $("#tickets option:selected").val();
+                window.location = "/show?show_id=" + show_id + "&tickets=" + tickets;
+            });
+        </script>
     </div>
 
     <!-- Synopsis Child -->

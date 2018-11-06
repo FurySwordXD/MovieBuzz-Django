@@ -52,7 +52,7 @@ class Show(models.Model):
         return self.date_time.date().strftime("%d-%b-%Y")
 
     def get_day(self):
-        return self.date_time.date().strftime("%A %d")
+        return self.date_time.date().strftime("%A - %d")
     
     def get_day_date(self):
         return self.date_time.date().strftime("%A %d, %b %Y")

@@ -8,7 +8,10 @@
 <br><br>
 <div class = 'w3-container w3-content w3-card-4 w3-text-white' style="padding: 0%;">
     <div class="w3-black w3-padding-large w3-content">
-        <h3 class="w3-large">{{ movie.name }} - {{ movie.language }}</h3>
+        <h3 class="w3-large">
+            {{ movie.name }} - {{ movie.language }}<br><br>
+            {{ screen.name }} - {{ screen.theatre.name }}
+        </h3>
     </div>
     
     <!--    Movie Picture       -->
@@ -37,7 +40,7 @@
         {% endfor %}
         </table>
         <script>
-            var tickets = 2;
+            var tickets = Number('{{ tickets }}');
             var seats = 0;
             var selected_seats = [];
             $(".seat").click(function(){
@@ -50,7 +53,7 @@
                         $(this).addClass('selected');
                         seats += 1;
                         selected_seats.push($(this).data('seat'));
-                        $("#seats-info").text(selected_seats);
+                        $("#seats-info").text(selected_seats.join(", "));
                     }
                 }
                 else {
@@ -58,27 +61,60 @@
                     $(this).attr('src', '{% static "movies/seat.png" %}');
                     seats -= 1;
                     selected_seats.pop($(this).data('seat'));
-                    $("#seats-info").text(selected_seats);
+                    $("#seats-info").text(selected_seats.join(", "));
                 }
             })
         </script>
         <img src = "https://img.spicinemas.in/resources/images/screen-this-way.png" width = "100%" style="margin-top:10px;">
         </div>
-        <div class="w3-col m3 w3-padding-large">
-            Tickets: 2<br>
-            Seats: <div id='seats-info' style="display:inline"></div>
-            <button class="w3-button w3-black w3-center w3-section" type="button" id="bookBtn">
+        <div class="w3-col m3">
+            <br>
+            <table class="w3-table">
+                <tr>
+                    <th colspan="2"><i>Booking Info:</i></th>
+                </tr>
+                <tr>
+                    <td><i>Movie:</i></td>
+                    <td>{{ movie.name }}</td>
+                </tr>
+                <tr>
+                    <td><i>Cinema:</i></td>
+                    <td>{{ screen.theatre }}</td>
+                </tr>
+                <tr>
+                    <td><i>Screen:</i></td>
+                    <td>{{ screen.name }}</td>
+                </tr>
+                <tr>
+                    <td><i>Tickets:</i></td>
+                    <td>{{ tickets }}</td>
+                </tr>
+                <tr>
+                    <td><i>Seats:</i></td>
+                    <td id='seats-info'></td>
+                </tr>
+            </table><br>
+            <a class="w3-button w3-black w3-center w3-section w3-hover-red  w3-padding-large w3-margin" href="/">
+                &times; Cancel Booking 
+            </a><br>
+            <button class="w3-button w3-black w3-center w3-section w3-hover-green w3-padding-large w3-margin" type="button" id="bookBtn">
                 <i class="fa fa-ticket"></i> Confirm Booking
             </button>
             <script>
                 $('#bookBtn').click(function() {
-                    var form = $('<form action="/book/" method="POST" style="display:none">' + 
-                    '{% csrf_token %}' +
-                    '<input type="text" name="seats" value="' + selected_seats + '">' +
-                    '<input type="text" name="show_id" value="{{ show_id }}">' +
-                    '</form>');
-                    $('body').append(form);
-                    form.submit();
+                    if (seats == tickets)
+                    {
+                        var form = $('<form action="/book/" method="POST" style="display:none">' + 
+                        '{% csrf_token %}' +
+                        '<input type="text" name="seats" value="' + selected_seats + '">' +
+                        '<input type="text" name="show_id" value="{{ show_id }}">' +
+                        '</form>');
+                        $('body').append(form);
+                        form.submit();
+                    }
+                    else {
+                        alert('Not enough seats selected!');
+                    }
                 });
             </script>
         </div>
