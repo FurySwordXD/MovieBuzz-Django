@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Booking Information
+{% endblock %}
+
+{% block body %}
+<br><br>
+<div class="w3-container w3-content w3-text-white w3-padding-large">
+    <h3>ORDER HISTORY</h3>
+    {% for x in data %}
+        <div class="w3-card-4 w3-row w3-section w3-padding-large w3-hover-opacity" style="background-color: rgb(40,40,40);">
+            <div class="w3-col m3 w3-padding-large">
+                <img class="w3-image" src="{{ x.booking.show.movie.small_image }}" style="width: 100%">
+            </div>
+            <div class="w3-col m9 w3-padding-large">
+                    {{ x.booking.show.movie.name }}<br><br>
+                    {{ x.date }} - {{ x.time }}<br><br>
+                    Cinema: {{ x.booking.show.theatre.name }} &nbsp;&nbsp;&nbsp;&nbsp;Screen: {{ x.booking.show.screen.name }}<br>
+                    <br>Tickets: {{ x.tickets }}<br>
+                    {{ x.seats }}<br>
+                   
+            </div> 
+        </div>
+    {% endfor %}
+</div>
+<br><br>
+{% endblock %}

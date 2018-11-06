@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ movie.name }}
+{% endblock %}
+
+{% block body %}
+<br><br>
+<div class = 'w3-container w3-content w3-card-4 w3-text-white' style="padding: 0%;">
+    <div class="w3-black w3-padding-large w3-content">
+        <h3 class="w3-large">{{ movie.name }} - {{ movie.language }}</h3>
+    </div>
+    
+    <!--    Movie Picture       -->
+    <div>
+        <img style = 'margin: 0px;width: 100%;height: 100%;' class = 'w3-hover-opacity' src="{{ movie.big_image }}">
+    </div>
+    
+    <div class="w3-row">
+        <br>
+        <div class="w3-col m9 w3-padding" style="border-right: 1px solid grey;">
+        <table class="w3-table">
+        {% load static %}
+
+        {% for row in seats %}
+            <tr>
+                <td>{{ row.row }}</td>
+                {% for cell in row.column %}
+                    {% if not cell.status %}
+                    <td><button class="w3-btn" style="padding:0;"><img class='w3-image seat' data-seat='{{ cell.cell }}' src="{% static 'movies/seat.png' %}" style="width:25px;height:25px;"></button></td>
+                    {% else %}
+                    <td><button class="w3-btn" style="padding:0;"><img class='w3-image' data-seat='{{ cell.cell }}' src="{% static 'movies/seat-booked.png' %}" style="width:25px;height:25px;"></button></td>
+                    {% endif %}
+                {% endfor %}
+                <td>{{ row.row }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+        <script>
+            var tickets = 2;
+            var seats = 0;
+            var selected_seats = [];
+            $(".seat").click(function(){
+                console.log($(this).data('seat'));
+                if (!$(this).hasClass('selected'))
+                {
+                    if (seats < tickets)
+                    {
+                        $(this).attr('src', '{% static "movies/seat-selected.png" %}');
+                        $(this).addClass('selected');
+                        seats += 1;
+                        selected_seats.push($(this).data('seat'));
+                        $("#seats-info").text(selected_seats);
+                    }
+                }
+                else {
+                    $(this).removeClass('selected');
+                    $(this).attr('src', '{% static "movies/seat.png" %}');
+                    seats -= 1;
+                    selected_seats.pop($(this).data('seat'));
+                    $("#seats-info").text(selected_seats);
+                }
+            })
+        </script>
+        <img src = "https://img.spicinemas.in/resources/images/screen-this-way.png" width = "100%" style="margin-top:10px;">
+        </div>
+        <div class="w3-col m3 w3-padding-large">
+            Tickets: 2<br>
+            Seats: <div id='seats-info' style="display:inline"></div>
+            <button class="w3-button w3-black w3-center w3-section" type="button" id="bookBtn">
+                <i class="fa fa-ticket"></i> Confirm Booking
+            </button>
+            <script>
+                $('#bookBtn').click(function() {
+                    var form = $('<form action="/book/" method="POST" style="display:none">' + 
+                    '{% csrf_token %}' +
+                    '<input type="text" name="seats" value="' + selected_seats + '">' +
+                    '<input type="text" name="show_id" value="{{ show_id }}">' +
+                    '</form>');
+                    $('body').append(form);
+                    form.submit();
+                });
+            </script>
+        </div>
+    </div>
+    
+</div>
+<br><br>
+{% endblock %}

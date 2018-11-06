@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{movie.name}}
+{% endblock %}
+
+{% block body %}
+<br><br>
+<div class = 'w3-container w3-content w3-card-4 w3-text-white' style="padding: 0%;">
+<!---   Movie Title Info    -->
+<div class="w3-black w3-padding-large">
+    <h3 class="w3-large">{{ movie.name }} - {{ movie.language }}</h3>
+</div>
+
+<!--    Movie Picture       -->
+<div>
+    <img style = 'margin: 0px;width: 100%;height: 100%;' class = 'w3-hover-opacity' src="{{ movie.big_image }}">
+</div>
+
+<div class="w3-content w3-padding-large w3-margin" style="border-bottom: 1px solid grey;">
+    <h3 class="w3-wide">SYNOPSIS</h3>
+    {{ movie.synopsis }}
+</div>
+<!--    Main Parent Div     -->
+<div class="w3-row w3-padding-large">
+
+    <!-- Seats Child -->
+    <div class="w3-col m9 w3-center w3-padding">
+        <div class="w3-bar w3-black w3-left">
+            <div class="w3-bar-item w3-black">
+                Tickets:
+            </div>
+            <select class="w3-select w3-black w3-bar-item" name="option">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+            </select> 
+            {% for block in data %}
+                {% if forloop.counter0 == 0 %}
+                <button class="w3-button w3-bar-item dayButton w3-teal w3-hover-teal" value="{{ block.date }}">{{ block.day }}</button>
+                {% else %}
+                <button class="w3-button w3-bar-item dayButton w3-hover-teal" value="{{ block.date }}">{{ block.day }}</button>
+                {% endif %}
+            {% endfor %}
+            <script>
+                $(".dayButton").click(function() {
+                    $(".dayButton").removeClass("w3-teal");
+                    $(this).addClass("w3-teal");
+                    $(".showsTable").hide();
+                    $("#"+$(this).val()).show();
+                });
+            </script>
+        </div>
+        {% for block in data %}
+            {% if forloop.counter0 == 0 %}
+            <div class="w3-table showsTable" id="{{ block.date }}">
+            {% else %}
+            <div class="w3-table showsTable" id="{{ block.date }}" style="display:none">
+            {% endif %}
+                {% for screen in block.screens %}
+                <div class="w3-row w3-card w3-section w3-padding">
+                    <div class="w3-col m3 w3-padding-large">{{ screen.name }}<br><i>({{ screen.theatre }})</i></div>
+                    <div class="w3-col m9 w3-bar">
+                    {% for show in screen.shows %}
+                        <a class="w3-btn w3-green w3-bar-item w3-margin-left w3-section w3-padding-small" href="/show/{{ show.show_id }}/">{{ show.time }}</a>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Synopsis Child -->
+    <div class="w3-col m3 w3-padding w3-right" style="border-left: 1px solid grey;">
+        <h4 class="w3-center">Details</h4>
+        <table class="w3-table" style="color: rgb(186, 178, 178);">
+            <tr>
+                <th>Name:</th>
+                <td>{{ movie.name }}</td>
+            </tr>
+            <tr>
+                <th>Genre:</th>
+                <td>{{ movie.genre }}</td>
+            </tr>
+            <tr>
+                <th>Language:</th>
+                <td>{{ movie.language }}</td>
+            </tr>
+            <tr>
+                <th>Duration:</th>
+                <td>{{ movie.duration }}</td>
+            </tr>
+        </table>
+        
+    </div>
+</div>
+
+</div>
+<br><br>    
+{% endblock %}

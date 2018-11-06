@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block title %}
+MovieBuzz
+{% endblock %}
+{% block body %}
+<style> 
+    body,h1,h2,h3,h4,h5,h6 
+    {font-family: "Lato", sans-serif;}
+
+    body, html {
+        height: 100%;
+        background-color: #202020;
+        color: white;
+        line-height: 1.8;
+    }
+
+
+    /* Create a Parallax Effect */
+    .bgimg-1, .bgimg-2, .bgimg-3 {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    /* First image (Logo. Full height) */
+    .bgimg-1 {
+        background-image: url("http://www.broadwaysd.com/wp-content/uploads/2017/12/sd-civic-theatre-main-img.jpg");
+        min-height: 100%;
+    }
+
+
+    /* Third image (About) */
+    .bgimg-3 {
+        background-image: url();
+        min-height: 70%;
+    }
+
+    .w3-wide {letter-spacing: 10px;}
+    .w3-hover-opacity {cursor: pointer;}
+
+    /* Turn off parallax scrolling for tablets and phones */
+    @media only screen and (max-device-width: 1024px) {
+        .bgimg-1, .bgimg-2, .bgimg-3 {
+            background-attachment: scroll;
+        }
+    }
+
+    .w3-left, .w3-right, .w3-badge {cursor:pointer}
+    .w3-badge {height:13px;width:13px;padding:0}
+</style>
+<!-- First Parallax Image with Logo Text -->
+<div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
+    <div class="w3-display-middle" style="white-space:nowrap;">
+        <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">MOVIE BUZZ</span>
+    </div>
+</div>
+
+<!-- Container (About Section) -->
+<div class="w3-content w3-container w3-padding-64" id="theatres">
+    <h3 class="w3-center w3-text-teal">THEATRES</h3>
+</div>
+
+<div class="w3-row w3-center w3-dark-grey w3-padding-16">
+    <div class="w3-quarter w3-section">
+        <span class="w3-xlarge"></span><br>
+    </div>
+</div>
+
+<!-- Second Parallax Image -->
+<div class="w3-display-container w3-opacity-min" id="movies" style="height:100%">
+    {% for movie in movies %}
+        <img class="w3-image slide_img" src="{{ movie.big_image }}" style="display:none;width: 100%;height: 100%;">    
+    {% endfor %}
+    <div class="w3-display-middle" style="white-space:nowrap;">
+        <span class="w3-xxlarge w3-black w3-text-white w3-wide w3-center w3-padding-large w3-animate-opacity">MOVIES</span>
+    </div>
+    <button class="w3-button w3-display-left w3-black w3-hover-white" onclick="nextSlide(-1)">&#10094;</button>
+    <button class="w3-button w3-display-right w3-black w3-hover-white" onclick="nextSlide(+1)">&#10095;</button>
+    <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle" style="width:100%">
+        {% for movie in movies %}
+            <span class="w3-badge w3-border w3-transparent w3-hover-white slide" onclick="showSlide('{{ loop.index }}')"></span>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Container (Movies Section) -->
+<div class="w3-content w3-container w3-padding-64">
+    <h3 class="w3-center w3-text-teal">Now Showing...</h3>
+    <br><br>
+    {% for movie in movies %}
+        <div class="w3-quarter w3-padding-small">
+            <a href="/movie/{{ movie.name }}" class="w3-btn w3-card-4 w3-hover-opacity" style="width:100%;padding:0;">
+                <img src="{{ movie.small_image }}" style="width:100%;">
+                <div class="w3-padding-small w3-center">{{ movie.name }}</div>
+            </a>
+        </div> 
+    {% endfor %}
+</div>
+
+<div class="w3-row w3-center w3-dark-grey w3-padding-16">
+    <div class="w3-quarter w3-section">
+        <span class="w3-xlarge"></span><br>
+    </div>
+</div>
+
+<!-- Third Parallax Image with Portfolio Text -->
+<div class="bgimg-3 w3-display-container w3-opacity-min" id="about">
+    <div class="w3-display-middle">
+        <span class="w3-xxlarge w3-black w3-text-white w3-wide w3-center w3-padding-large w3-animate-opacity">CONTACT</span>
+    </div>
+</div>
+
+<!-- Container (Contact Section) -->
+<div class="w3-content w3-container w3-padding-64">
+    <h3 class="w3-center  w3-text-teal">ABOUT US</h3>
+
+    <div class="w3-row w3-padding-32 w3-section">
+
+        <div class="w3-col m4 w3-panel">
+            <div id="googleMap" class="w3-round-large w3-greyscale" style="width:100%;height:400px;"></div>
+        </div>
+
+        <form class="w3-card-4 w3-padding-small" action="mailto:sainath.g2017@vitstudent.ac.in" method="post" enctype="text/plain" target="_blank">
+            <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+                <div class="w3-half">
+                    <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
+                </div>
+                <div class="w3-half">
+                    <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
+                </div>
+            </div>
+            <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
+            <button class="w3-button w3-black w3-right w3-section" type="submit">
+                <i class="fa fa-paper-plane"></i> SEND MESSAGE
+            </button>
+        </form>
+
+     </div>
+</div>
+
+<script type="text/javascript">
+    function myMap()
+    {
+        myCenter=new google.maps.LatLng(41.878114, -87.629798);
+        var mapOptions= {
+            center:myCenter,
+            zoom:12, scrollwheel: false, draggable: false,
+            mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+        var map=new google.maps.Map(document.getElementById("googleMap"),mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: myCenter,
+        });
+        marker.setMap(map);
+    }
+
+    var slideIndex = 0;
+    var timeHandle;
+
+    function nextSlide(index)
+    {
+        showSlide(slideIndex + index);
+    }
+    function showSlide(index)
+    {
+        clearTimeout(timeHandle);
+        
+        var slides = $(".slide_img");
+        if(index >= slides.length)
+            index = 0;
+        else if(index < 0)
+            index = slides.length - 1;
+
+        slideIndex = index;
+        
+        console.log(slides[slideIndex]);
+        slides.css("display", "none");
+
+        $(".bgimg-2").fadeOut(0);
+        $(".bgimg-2").stop();
+        $(".bgimg-2").fadeIn(500);
+        slides[slideIndex].style.display = "block";
+        toggleSlideBadge();
+
+        timeHandle = setTimeout(function(){showSlide(slideIndex + 1)}, 5000);
+    }
+    showSlide(0);
+    function toggleSlideBadge()
+    {
+        slides = $(".slide");
+        for (var i = 0; i < slides.length; i++) {
+            $(slides[i]).removeClass("w3-white");
+        }
+        $(slides[slideIndex]).addClass("w3-white");
+    }
+
+    function movie_access(movieLocation)
+    {
+        console.log("Login: ",loggedIn);
+        if(loggedIn == true){
+            window.location.replace(movieLocation);
+        }else{
+            toggleLoginModal();
+        }
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZp9GHQ1w3ojKZTNj2ZjGjL9xk-1HkCuo&callback=myMap"></script>
+{% endblock %}
