@@ -78,24 +78,23 @@ def book(request):
         print(seats)
         show = Show.objects.get(id=request.POST['show_id'])
         user = request.user
-        if user.is_authenticated:
-            booked_seats = set()
-            for booking in Booking.objects.filter(show=request.POST['show_id']):
-                for seat in booking.seats.all():
-                    booked_seats.add(seat.row_id+seat.column_id)
-            booked_seats = sorted(booked_seats)
-            for seat in seats:
-                if seat == booked_seats:
-                    return HttpResponse("Error")
-            booking = Booking()
-            booking.show = show
-            booking.user = user
-            booking.save()
-            for seat in seats:
-                s = Seat.objects.get(row_id=seat[0], column_id=seat[1:])
-                booking.seats.add(s)
-            booking.save()
-    
+        booked_seats = set()
+        for booking in Booking.objects.filter(show=request.POST['show_id']):
+            for seat in booking.seats.all():
+                booked_seats.add(seat.row_id+seat.column_id)
+        booked_seats = sorted(booked_seats)
+        for seat in seats:
+            if seat == booked_seats:
+                return HttpResponse("Error")
+        booking = Booking()
+        booking.show = show
+        booking.user = user
+        booking.save()
+        for seat in seats:
+            s = Seat.objects.get(row_id=seat[0], column_id=seat[1:])
+            booking.seats.add(s)
+        booking.save()
+        return redirect('/booking_info/')
     return redirect('/')
 
 def booking_info(request):

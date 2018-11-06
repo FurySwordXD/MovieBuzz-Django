@@ -11,6 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <style>
+        a { cursor: pointer; }
         button { outline: none; }
         .w3-bar 
         {
@@ -32,7 +33,7 @@
             <a class="w3-bar-item w3-button w3-hide-small w3-ripple w3-text-white w3-hover-teal w3-right" onclick="toggleSignupModal()" id="signupBtn"><i class="fa fa-user-circle"></i> SIGN UP</a>
             <div class="w3-dropdown-hover w3-right" id="profileDropdown">
                 <a class="w3-bar-item w3-button w3-hide-small w3-ripple w3-text-white w3-hover-teal"  id="profileBtn" style="display:none"> Name</a>
-                <div class="w3-dropdown-content w3-bar-block w3-card-4" style="margin-top: 40px;">
+                <div class="w3-dropdown-content w3-bar-block w3-card-4" style="margin-top: 35px; width: 100%;">
                   <a onclick="toggleProfileModal()" class="w3-bar-item w3-button">Profile</a>
                   <a href="/booking_info/" class="w3-bar-item w3-button">Booking Info</a>
                   <a onclick="logout()" class="w3-bar-item w3-button">Logout</a>
@@ -288,12 +289,14 @@
                     $("#profileAge").val("");
                     $("#profileModal").fadeOut();
                     $("#profileDropdown").hide();
+                    logged_in = false;
                 }
             });
         }
     
         function onLoggedIn(username, email, name)
         {
+            logged_in = true;
             console.log(username, email, name);
             $("#profileDropdown").show();
             $("#loginBtn").hide();
@@ -305,6 +308,7 @@
             $("#profileForm :input[name='username']").val(username);
         }
     
+        var logged_in = false;
         $(document).ready(function(){
             {% if user.is_authenticated %}
                 onLoggedIn('{{user.username}}', '{{user.email}}', '{{user.first_name}}' + ' ' + '{{user.last_name}}');
