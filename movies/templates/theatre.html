@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ theatre.name }}
+{% endblock %}
+
+{% block body %}
+<br><br>
+<div class="w3-container w3-content w3-text-white" style="padding:0;">
+    <img src="{{ theatre.big_image }}" class="w3-image" style="width:100%;">
+    <br><br>
+    <div class="w3-bar w3-black w3-left w3-padding-large w3-card-4">
+        <div class="w3-bar-item w3-black">
+            Tickets:
+        </div>
+        <select class="w3-select w3-black w3-bar-item" name="option" id="tickets">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+        </select> 
+        {% for date in dates %}
+            {% if forloop.counter0 == 0 %}
+            <button class="w3-button w3-bar-item dayButton w3-teal w3-hover-teal" value="{{ date.date }}">{{ date.day }}</button>
+            {% else %}
+            <button class="w3-button w3-bar-item dayButton w3-hover-teal" value="{{ date.date }}">{{ date.day }}</button>
+            {% endif %}
+        {% endfor %}
+        <script>
+            $(".dayButton").click(function() {
+                selectDate(this);
+            });
+            function selectDate(element)
+            {
+                $(".dayButton").removeClass("w3-teal");
+                $(element).addClass("w3-teal");
+                $(".showsTable").hide();
+                $("#"+$(element).val()).show();
+                $('.movie').show();
+                $('.movie').each(function() {
+                    var hide = true;
+                    console.log($('.showsTable', this).length);
+                    $('.showsTable', this).each(function() {
+                        if ($(this).is(':visible')) {
+                            hide = false;
+                        }
+                    });
+                    if (hide)
+                    {
+                        $(this).hide();
+                    }
+                });
+            }
+            $(document).ready(function(){
+                selectDate($("button[value='{{ first_date }}']"));
+            });
+        </script>
+    </div>
+    <br><br><br><br>
+    {% for block in data %}
+        <div class="w3-row w3-card-4 movie w3-section">
+            <img class="w3-image w3-col m3 w3-hover-opacity" src="{{ block.movie_image }}">
+            <div class="w3-col m9">
+                {% for per_day in block.per_day %}  
+                    <div class="showsTable" id="{{ per_day.date }}">
+                        <br>
+                        <div class="w3-row w3-padding-large">
+                            <div class="w3-col m3">Screens</div>
+                            <div class="w3-col m9">Shows</div>
+                        </div>
+                        <hr class="w3-margin">
+                        {% for screen in per_day.screens %}
+                        <div class="w3-row">
+                            <div class="w3-col m3 w3-padding-large" style="margin-top:5px;">{{ screen.screen_name }}</div>
+                            <div class="w3-col m9">
+                                {% for show in screen.shows %}
+                                <a class="w3-btn w3-green w3-bar-item w3-margin-left w3-section w3-padding-small show" data-show_id="{{ show.show_id }}">{{ show.time }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                   
+            </div>
+        </div>
+    {% endfor %}
+    <script>
+        $(".show").click(function() { 
+            var show_id = $(this).data('show_id');
+            var tickets = $("#tickets option:selected").val();
+            window.location = "/show?show_id=" + show_id + "&tickets=" + tickets;
+        }); 
+    </script>
+</div>
+<br><br>
+{% endblock %}
