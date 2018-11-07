@@ -19,7 +19,7 @@
         }
     </style>
 </head>
-<body style="background-color: rgb(30,30,30);">
+<body style="background-color: rgb(30,30,30);" id="body">
     <div class="w3-top">
         <div class="w3-bar" id="myNavbar">
             <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
@@ -32,7 +32,7 @@
             <a class="w3-bar-item w3-button w3-hide-small w3-ripple w3-text-white w3-hover-teal w3-right" onclick="toggleLoginModal()" id="loginBtn"><i class="fa fa-user"></i> LOGIN</a>
             <a class="w3-bar-item w3-button w3-hide-small w3-ripple w3-text-white w3-hover-teal w3-right" onclick="toggleSignupModal()" id="signupBtn"><i class="fa fa-user-circle"></i> SIGN UP</a>
             <div class="w3-dropdown-hover w3-right" id="profileDropdown">
-                <a class="w3-bar-item w3-button w3-hide-small w3-ripple w3-text-white w3-hover-teal"  id="profileBtn" style="display:none"> Name</a>
+                <a class="w3-bar-item w3-button w3-hide-small w3-ripple w3-text-white w3-hover-teal"  id="profileBtn" style="display:none;"> Name</a>
                 <div class="w3-dropdown-content w3-bar-block w3-card-4" style="margin-top: 35px; width: 100%;">
                   <a onclick="toggleProfileModal()" class="w3-bar-item w3-button">Profile</a>
                   <a href="/booking_info/" class="w3-bar-item w3-button">Booking Info</a>
@@ -133,10 +133,9 @@
     {% block body %}
 
     {% endblock %}
-
     <!-- Footer -->
     <footer class="w3-center w3-black w3-padding-64 w3-opacity w3-hover-opacity-off">
-        <a href="#home" class="w3-button"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+        <a href="#body" class="w3-button"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
         <div class="w3-xlarge w3-section">
         <a href="https://www.facebook.com/FurySwordXD"><i class="fa fa-facebook-official w3-hover-opacity"></i></a>
         <a href="https://www.instagram.com/furyswordxd"><i class="fa fa-instagram w3-hover-opacity"></i></a>
@@ -222,7 +221,7 @@
                     console.log(response);
                     if (response['flag'] == 1)
                     {
-                        onLoggedIn(response['email'], response['name'], response['age']);
+                        onLoggedIn(response['username'], response['email'], response['name']);
                         toggleSignupModal();
                     }
                 }
@@ -284,9 +283,9 @@
                     $("#signupBtn").show();
                     $("#profileBtn").hide();
                     $("#profileBtn").html("");
-                    $("#profileEmail").val("");
-                    $("#profileName").val("");
-                    $("#profileAge").val("");
+                    $("#profileForm :input[name='email']").val("");
+                    $("#profileForm :input[name='name']").val("");
+                    $("#profileForm :input[name='username']").val("");
                     $("#profileModal").fadeOut();
                     $("#profileDropdown").hide();
                     logged_in = false;

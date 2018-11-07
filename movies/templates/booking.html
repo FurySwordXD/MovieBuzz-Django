@@ -23,6 +23,11 @@ Booking Information
             </div> 
         </div>
     {% endfor %}
+    {% if data|length == 0 %}
+        <div class="w3-card-4 w3-section w3-padding-large w3-text-large" style="background-color: rgb(40,40,40);">
+            You haven't made any bookings yet...
+        </div><br><br><br><br><br><br><br><br><br><br><br>
+    {% endif %}
 </div>
 <br><br>
 {% endblock %}

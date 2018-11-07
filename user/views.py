@@ -31,7 +31,7 @@ def register(request):
         user.email = email
         user.set_password(password)
         user.first_name = name.split()[0]
-        if name.split()[1]:
+        if len(name.split()) == 2:
             user.last_name = name.split()[1]
         user.save()
 
