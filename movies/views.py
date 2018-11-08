@@ -173,7 +173,7 @@ def booking_info(request):
     if request.user.is_authenticated:
         bookings = Booking.objects.filter(user=request.user)
         data = []
-        for booking in reverse(bookings):
+        for booking in reversed(bookings):
             seats = ''
             for seat in booking.seats.all():
                 seats += str(seat) + ', '
